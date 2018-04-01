@@ -223,19 +223,19 @@ class OBJECT_OT_add_road(bpy.types.Operator):
 
 #assembling the default road
         
-        O.curve.primitive_bezier_curve_add(radius=10)        
+        bpy.ops.curve.primitive_bezier_curve_add(radius=10)        
 
-        roadCurve=C.object
+        roadCurve=bpy.context.object
         print(roadCurve) #whaaaaat the fuuuuck....this does it?
 
         
         if (self.dividerWidth !=0):
             meshSetup.groundMesh("divider", 0, self.dividerWidth)
-            curveSetup.curveSetup (roadCurve, D.objects["divider"], 1)     
+            curveSetup.curveSetup (roadCurve, bpy.data.objects["divider"], 1)     
         
         if (self.laneWidth !=0):
             meshSetup.groundMesh("lanes", self.dividerWidth, self.dividerWidth+self.laneWidth)
-            curveSetup.curveSetup (roadCurve, D.objects["lanes"], 1, self.lanes)     
+            curveSetup.curveSetup (roadCurve, bpy.data.objects["lanes"], 1, self.lanes)     
         
         #since road is multiplicative, a custom variable
         newLaneStart = self.laneWidth*self.lanes
@@ -261,22 +261,22 @@ class OBJECT_OT_add_road(bpy.types.Operator):
         
 
      
-        curveSetup.curveSetup (roadCurve, D.objects["shoulder"], 1)             
-        curveSetup.curveSetup (roadCurve, D.objects["bike"], 1)     
-        curveSetup.curveSetup (roadCurve, D.objects["gutter"], 1)     
-        curveSetup.curveSetup (roadCurve, D.objects["greenway"], 1)             
-        curveSetup.curveSetup (roadCurve, D.objects["sidewalk"], 1)             
+        curveSetup.curveSetup (roadCurve, bpy.data.objects["shoulder"], 1)             
+        curveSetup.curveSetup (roadCurve, bpy.data.objects["bike"], 1)     
+        curveSetup.curveSetup (roadCurve, bpy.data.objects["gutter"], 1)     
+        curveSetup.curveSetup (roadCurve, bpy.data.objects["greenway"], 1)             
+        curveSetup.curveSetup (roadCurve, bpy.data.objects["sidewalk"], 1)             
 
 
         
         
-        materialSetup.randomMaterial(D.objects["divider"])
-        materialSetup.randomMaterial(D.objects["lanes"])
-        materialSetup.randomMaterial(D.objects["shoulder"])        
-        materialSetup.randomMaterial(D.objects["bike"])
-        materialSetup.randomMaterial(D.objects["gutter"])
-        materialSetup.randomMaterial(D.objects["greenway"])
-        materialSetup.randomMaterial(D.objects["sidewalk"])
+        materialSetup.randomMaterial(bpy.data.objects["divider"])
+        materialSetup.randomMaterial(bpy.data.objects["lanes"])
+        materialSetup.randomMaterial(bpy.data.objects["shoulder"])        
+        materialSetup.randomMaterial(bpy.data.objects["bike"])
+        materialSetup.randomMaterial(bpy.data.objects["gutter"])
+        materialSetup.randomMaterial(bpy.data.objects["greenway"])
+        materialSetup.randomMaterial(bpy.data.objects["sidewalk"])
         
         return {'FINISHED'}
 
