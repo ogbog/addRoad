@@ -1,7 +1,3 @@
-
-
-
-
 bl_info = {
     "name":"Add a road ",
     "author":"Oscar",
@@ -32,12 +28,14 @@ if "bpy" in locals():
     importlib.reload(curveSetup)
     importlib.reload(meshSetup)
     importlib.reload(materialSetup)
+#    importlib.reload(parentRig)
     
 
 else:
-    from . import curveSetup 
-    from . import meshSetup 
+    from . import curveSetup
+    from . import meshSetup
     from . import materialSetup
+#    from . import parentRig
     
     
     
@@ -81,7 +79,7 @@ class OBJECT_OT_add_road(bpy.types.Operator):
     
     
     roadPresets = bpy.props.EnumProperty(
-        name ="Road presets",
+        name = "Road presets",
         description = "Various default roads",
         
         items = [('university', "University Ave", "University Ave"), #identifier, name, description
