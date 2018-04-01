@@ -2,9 +2,7 @@
 import bpy
 import random
 from mathutils import Vector
-C=bpy.context
-D=bpy.data
-O=bpy.ops
+
 
 
 def groundMesh (name, dist1, dist2): #dist1&2 are distance from center and how far from that start
