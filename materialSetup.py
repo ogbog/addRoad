@@ -9,9 +9,7 @@ def randomMaterial(ob):
         bpy.context.scene.render.engine = 'CYCLES'
         
 
-    
-    bpy.ops.material.new()
-    new_mat = bpy.data.materials[-1]  # the new material is the last one in the list
-    new_mat.name = ob.name+"Material"
-    ob.active_material=bpy.data.materials[ob.name+'Material']
-    bpy.data.materials[ob.name+'Material'].node_tree.nodes['Diffuse BSDF'].inputs[0].default_value = (random.random(), random.random(), random.random(), 1) # black
+    newMat = bpy.data.materials.new(ob.name+"Material")
+    newMat.use_nodes = True
+    ob.active_material = newMat
+    newMat.node_tree.nodes['Diffuse BSDF'].inputs[0].default_value = (random.random(), random.random(), random.random(), 1) # black
