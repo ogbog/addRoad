@@ -13,7 +13,7 @@ def curveSetup (curve, repeater, spacing, lanes=0):
         if i == 0:
             mySpline.bezier_points[i].handle_left_type = 'VECTOR'
             mySpline.bezier_points[i].handle_right_type = 'VECTOR'
-        else: z
+        else:
             mySpline.bezier_points[i].handle_left_type = 'ALIGNED'
             mySpline.bezier_points[i].handle_right_type = 'ALIGNED'
             mySpline.bezier_points[i].handle_left = (50, 75, 0)
