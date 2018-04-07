@@ -29,34 +29,34 @@ def curveSetup (curve, repeater, spacing, lanes=0):
     # TODO(Joey): change this from checking if the name is "lanes"
     #             to lanes value being non-zero
     if repeater.name =="lanes":
-        bpy.data.objects[repeater.name].modifiers.new("ArrayLanes", type='ARRAY')
-        bpy.data.objects[repeater.name].modifiers["ArrayLanes"].count = lanes
-        bpy.data.objects[repeater.name].modifiers["ArrayLanes"].relative_offset_displace = (0,1,0)
+        ArrayLanes = repeater.modifiers.new("ArrayLanes", type='ARRAY')
+        ArrayLanes.count = lanes
+        ArrayLanes.relative_offset_displace = (0,1,0)
 
 
 
     #mirror, since these are 2 way symmetrical roads
-    repeater.modifiers.new("Mirror_Twoway", type='MIRROR')
-    repeater.modifiers["Mirror_Twoway"].use_x = False
-    repeater.modifiers["Mirror_Twoway"].use_y = True #identical, left in to show goal
+    MirrorTwoway = repeater.modifiers.new("Mirror_Twoway", type='MIRROR')
+    MirrorTwoway.use_x = False
+    MirrorTwoway.use_y = True #identical, left in to show goal
     
 
     #repeat along the curve
-    repeater.modifiers.new("ArrayCurveLength", type='ARRAY')
-    repeater.modifiers["ArrayCurveLength"].fit_type = 'FIT_CURVE'
-    repeater.modifiers["ArrayCurveLength"].curve = curve
-    repeater.modifiers["ArrayCurveLength"].use_merge_vertices = True
+    ArrayCurveLength = repeater.modifiers.new("ArrayCurveLength", type='ARRAY')
+    ArrayCurveLength.fit_type = 'FIT_CURVE'
+    ArrayCurveLength.curve = curve
+    ArrayCurveLength.use_merge_vertices = True
 
 
 
 
     #curve deformer
-    repeater.modifiers.new("Curve", type='CURVE')
-    repeater.modifiers["Curve"].object=curve
+    CurveModifier = repeater.modifiers.new("Curve", type='CURVE')
+    CurveModifier.object=curve
     
     bpy.context.scene.objects.active = repeater
     bpy.ops.object.location_clear(clear_delta=False)
 
 
     #Visibility
-    curve.show_x_ray = True #
+    curve.show_x_ray = True
