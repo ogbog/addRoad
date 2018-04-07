@@ -7,7 +7,7 @@ from mathutils import Vector
 def randomMaterial(ob):
     if bpy.context.scene.render.engine != 'CYCLES':
         bpy.context.scene.render.engine = 'CYCLES'
-        
+
 
     newMat = bpy.data.materials.new(ob.name+"Material")
     newMat.use_nodes = True
