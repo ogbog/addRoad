@@ -107,41 +107,49 @@ class OBJECT_OT_add_road(bpy.types.Operator):
     lanes = bpy.props.IntProperty( 
         name = "Lanes",
         default = 2,
+        min = 1,
         description = "Number of lanes"
         )
     laneWidth = bpy.props.FloatProperty(
         name = "Lane Width",
         default = 3,
+        min = .01,
         description = "How wide across each lane is"
         )
     dividerWidth = bpy.props.FloatProperty(
         name = "Divider width",
         default = .5,
+        min = 0,
         description = "division size between east/west traffic lanes"
         )
     shoulderWidth = bpy.props.FloatProperty(
         name = "Shoulder width",
         default = 2,
+        min = 0,
         description = "width of shoulder or parking lane to left/right"
         )
 
     bikeWidth = bpy.props.FloatProperty(
         name = "Bike width",
         default = 1,
+        min = 0,
         description = "width of shoulder or parking lane to left/right"
         )
     gutterWidth = bpy.props.FloatProperty(
         name = "Gutter width",
         default = .2,
+        min = 0,
         description = "width of gutter as transition to pedestrian area" #needs a height modifier...?
         )
     greenwayWidth = bpy.props.FloatProperty(
         name="Greenway width",
         default = 1,
+        min = 0,
         description = "width of greenish area ala seattle" )    
     sidewalkWidth = bpy.props.FloatProperty(
         name="Sidewalk width",
         default = 1.5,
+        min = 0,
         description = "width of sidewalk" )
     name = bpy.props.StringProperty(
         name = "Name",
@@ -242,6 +250,9 @@ class OBJECT_OT_add_road(bpy.types.Operator):
         #since road is multiplicative, a custom variable
         newLaneStart = self.laneWidth*self.lanes
         newLaneStart +=self.dividerWidth
+
+        
+
         
         if (self.shoulderWidth != 0):
             meshSetup.groundMesh("shoulder", newLaneStart, newLaneStart + self.shoulderWidth)
@@ -262,12 +273,12 @@ class OBJECT_OT_add_road(bpy.types.Operator):
             newLaneStart+=self.sidewalkWidth
         
 
-     
-        curveSetup.curveSetup (roadCurve, bpy.data.objects["shoulder"], 1)             
-        curveSetup.curveSetup (roadCurve, bpy.data.objects["bike"], 1)     
-        curveSetup.curveSetup (roadCurve, bpy.data.objects["gutter"], 1)     
-        curveSetup.curveSetup (roadCurve, bpy.data.objects["greenway"], 1)             
-        curveSetup.curveSetup (roadCurve, bpy.data.objects["sidewalk"], 1)             
+
+        roadExtras = ["shoulder", "bike", "gutter", "greenway", "sidewalk"]
+        for i in roadExtras:
+            if bpy.data.objects.get(i) is not None:
+                curveSetup.curveSetup (roadCurve, bpy.data.objects[i], 1)      
+
 
 
         
@@ -280,15 +291,10 @@ class OBJECT_OT_add_road(bpy.types.Operator):
             
             
         
-        
-        materialSetup.randomMaterial(bpy.data.objects["divider"])
-        materialSetup.randomMaterial(bpy.data.objects["lanes"])
-        materialSetup.randomMaterial(bpy.data.objects["shoulder"])        
-        materialSetup.randomMaterial(bpy.data.objects["bike"])
-        materialSetup.randomMaterial(bpy.data.objects["gutter"])
-        materialSetup.randomMaterial(bpy.data.objects["greenway"])
-        materialSetup.randomMaterial(bpy.data.objects["sidewalk"])
-         
+        for i in x: 
+            if bpy.data.objects.get(i) is not None:
+                materialSetup.randomMaterial(bpy.data.objects[i])
+
         return {'FINISHED'}
 
 

@@ -21,7 +21,7 @@ def useCurve(ob):
 
 def createCurve(): #style = selected curve or new curve. curve is optional variable.
     cu=bpy.data.curves.new("myCurve", 'CURVE')
-    ob=bpy.data.objects.new("penis", cu)
+    ob=bpy.data.objects.new("CurvyRoad", cu)
     ob.location = (0,0,0)
     ob.select=True
     ob.show_name = True
