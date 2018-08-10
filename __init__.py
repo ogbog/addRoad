@@ -25,6 +25,7 @@ Import logic:
 
 if "bpy" in locals():
     import importlib
+    importlib.reload(makeCurve)
     importlib.reload(curveSetup)
     importlib.reload(meshSetup)
     importlib.reload(materialSetup)
@@ -32,6 +33,7 @@ if "bpy" in locals():
     
 
 else:
+    from . import makeCurve
     from . import curveSetup
     from . import meshSetup
     from . import materialSetup
@@ -146,12 +148,15 @@ class OBJECT_OT_add_road(bpy.types.Operator):
         default = "Road",
         description = "Name of added road"
         )
+
+
     
     def draw(self, context):
             layout = self.layout
             scene = bpy.data.window_managers["WinMan"].operators['MESH_OT_add_road']
             #that big long name is where used panels are
             #hence still uses our props
+            #it should instead be on the rig. So rig should be before...?
             layout.label(text="Add a road, dude!")   
             
 
@@ -220,10 +225,9 @@ class OBJECT_OT_add_road(bpy.types.Operator):
 
 
 #assembling the default road
+        makeCurve.makeCurve()
+        roadCurve = bpy.context.selected_objects[-1]        
         
-        bpy.ops.curve.primitive_bezier_curve_add(radius=10)        
-
-        roadCurve=bpy.context.object
         print(roadCurve) #whaaaaat the fuuuuck....this does it?
 
         
@@ -267,6 +271,15 @@ class OBJECT_OT_add_road(bpy.types.Operator):
 
 
         
+        x=["divider", "lanes", "shoulder", "bike", "gutter", "greenway", "sidewalk"]
+        
+        #for i in range(len(x)):
+        #    if (len(bpy.data.objects[x[i]].material_slots) == 0):
+        #        materialSetup.randomMaterial(bpy.data.objects[x[i]])
+            
+            
+            
+        
         
         materialSetup.randomMaterial(bpy.data.objects["divider"])
         materialSetup.randomMaterial(bpy.data.objects["lanes"])
@@ -275,7 +288,7 @@ class OBJECT_OT_add_road(bpy.types.Operator):
         materialSetup.randomMaterial(bpy.data.objects["gutter"])
         materialSetup.randomMaterial(bpy.data.objects["greenway"])
         materialSetup.randomMaterial(bpy.data.objects["sidewalk"])
-        
+         
         return {'FINISHED'}
 
 

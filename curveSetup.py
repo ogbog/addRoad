@@ -5,19 +5,7 @@ from mathutils import Vector
 
 def curveSetup (curve, repeater, spacing, lanes=0):
 
-    mySpline = curve.data.splines.active
-    mySpline.bezier_points[0].co.xyz = Vector((0,0,0))
-    mySpline.bezier_points[1].co.xyz = Vector((0,100,0))
-
-    for i, bezierPoint in enumerate(mySpline.bezier_points):
-        if i == 0:
-            bezierPoint.handle_left_type = 'VECTOR'
-            bezierPoint.handle_right_type = 'VECTOR'
-        else:
-            bezierPoint.handle_left_type = 'ALIGNED'
-            bezierPoint.handle_right_type = 'ALIGNED'
-            bezierPoint.handle_left = (50, 75, 0)
-            bezierPoint.handle_left = (-50, 125, 0)
+    
 
     repeater.parent=curve
     bpy.context.scene.objects.active = repeater
@@ -60,3 +48,5 @@ def curveSetup (curve, repeater, spacing, lanes=0):
 
     #Visibility
     curve.show_x_ray = True
+
+
