@@ -225,11 +225,11 @@ class OBJECT_OT_add_road(bpy.types.Operator):
 
 
 #assembling the default road
+
         makeCurve.makeCurve()
         roadCurve = bpy.context.selected_objects[-1]        
         
-        print(roadCurve) #whaaaaat the fuuuuck....this does it?
-
+        
         
         if (self.dividerWidth !=0):
             meshSetup.groundMesh("divider", 0, self.dividerWidth)

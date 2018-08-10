@@ -2,7 +2,24 @@ import bpy
 import random
 from mathutils import Vector
 
-def makeCurve(): #style = selected curve or new curve. curve is optional variable.
+
+def makeCurve():
+    if (len(bpy.context.selected_objects) > 0 and bpy.context.selected_objects[-1].type == "CURVE"):
+        useCurve(bpy.context.selected_objects[-1])
+    else:
+        createCurve()
+    
+
+
+def useCurve(ob):
+
+    ob.select=True
+    ob.show_name = True
+    start = ob.data.splines[0].bezier_points[0].co
+    bpy.context.scene.cursor_location = start
+    bpy.ops.object.origin_set(type='ORIGIN_CURSOR')
+
+def createCurve(): #style = selected curve or new curve. curve is optional variable.
     cu=bpy.data.curves.new("myCurve", 'CURVE')
     ob=bpy.data.objects.new("penis", cu)
     ob.location = (0,0,0)
