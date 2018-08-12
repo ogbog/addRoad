@@ -25,6 +25,7 @@ Import logic:
 
 if "bpy" in locals():
     import importlib
+    importlib.reload(roadInterface)
     importlib.reload(makeCurve)
     importlib.reload(curveSetup)
     importlib.reload(meshSetup)
@@ -33,6 +34,7 @@ if "bpy" in locals():
     
 
 else:
+    from . import roadInterface
     from . import makeCurve
     from . import curveSetup
     from . import meshSetup
@@ -233,6 +235,9 @@ class OBJECT_OT_add_road(bpy.types.Operator):
 
 
 #assembling the default road
+        roadExtras = []
+        roadMeshes = []
+
 
         makeCurve.makeCurve()
         roadCurve = bpy.context.selected_objects[-1]        
@@ -240,49 +245,54 @@ class OBJECT_OT_add_road(bpy.types.Operator):
         
         
         if (self.dividerWidth !=0):
-            meshSetup.groundMesh("divider", 0, self.dividerWidth)
-            curveSetup.curveSetup (roadCurve, bpy.data.objects["divider"], 1)     
-        
+            divider = meshSetup.groundMesh("divider", 0, self.dividerWidth)
+            curveSetup.curveSetup (roadCurve, divider, 1)     
+            roadMeshes.append(divider)
         if (self.laneWidth !=0):
-            meshSetup.groundMesh("lanes", self.dividerWidth, self.dividerWidth+self.laneWidth)
-            curveSetup.curveSetup (roadCurve, bpy.data.objects["lanes"], 1, self.lanes)     
+            lanes = meshSetup.groundMesh("lanes", self.dividerWidth, self.dividerWidth+self.laneWidth)
+            curveSetup.curveSetup (roadCurve, lanes, 1, self.lanes)     
+            roadMeshes.append(lanes)
         
         #since road is multiplicative, a custom variable
         newLaneStart = self.laneWidth*self.lanes
         newLaneStart +=self.dividerWidth
 
-        
+#        roadExtras = [shoulder, bike, gutter, greenway, sidewalk]
+#        roadMeshes=[divider, lanes, shoulder, bike, gutter, greenway, sidewalk]        
+
 
         
         if (self.shoulderWidth != 0):
-            meshSetup.groundMesh("shoulder", newLaneStart, newLaneStart + self.shoulderWidth)
+            shoulder = meshSetup.groundMesh("shoulder", newLaneStart, newLaneStart + self.shoulderWidth)            
             newLaneStart+=self.shoulderWidth        
+            roadExtras.append(shoulder)
         
         if (self.bikeWidth !=0):
-            meshSetup.groundMesh("bike", newLaneStart, newLaneStart + self.bikeWidth)
+            bike = meshSetup.groundMesh("bike", newLaneStart, newLaneStart + self.bikeWidth)
             newLaneStart+=self.bikeWidth        
+            roadExtras.append(bike)
         
         if (self.gutterWidth !=0):
-            meshSetup.groundMesh("gutter", newLaneStart, newLaneStart + self.gutterWidth)
+            gutter = meshSetup.groundMesh("gutter", newLaneStart, newLaneStart + self.gutterWidth)
             newLaneStart+=self.gutterWidth        
+            roadExtras.append(gutter)
         if (self.greenwayWidth !=0):
-            meshSetup.groundMesh("greenway", newLaneStart, newLaneStart + self.greenwayWidth)
+            greenway = meshSetup.groundMesh("greenway", newLaneStart, newLaneStart + self.greenwayWidth)
             newLaneStart+=self.greenwayWidth        
+            roadExtras.append(greenway)
         if (self.sidewalkWidth !=0):
-            meshSetup.groundMesh("sidewalk", newLaneStart, newLaneStart + self.sidewalkWidth)
+            sidewalk = meshSetup.groundMesh("sidewalk", newLaneStart, newLaneStart + self.sidewalkWidth)
             newLaneStart+=self.sidewalkWidth
+            roadExtras.append(sidewalk)
         
+        roadMeshes += roadExtras
 
-
-        roadExtras = ["shoulder", "bike", "gutter", "greenway", "sidewalk"]
         for i in roadExtras:
-            if bpy.data.objects.get(i) is not None:
-                curveSetup.curveSetup (roadCurve, bpy.data.objects[i], 1)      
+            curveSetup.curveSetup (roadCurve, i, 1)      
 
 
 
         
-        x=["divider", "lanes", "shoulder", "bike", "gutter", "greenway", "sidewalk"]
         
         #for i in range(len(x)):
         #    if (len(bpy.data.objects[x[i]].material_slots) == 0):
@@ -291,9 +301,8 @@ class OBJECT_OT_add_road(bpy.types.Operator):
             
             
         
-        for i in x: 
-            if bpy.data.objects.get(i) is not None:
-                materialSetup.randomMaterial(bpy.data.objects[i])
+        for i in roadMeshes: 
+            materialSetup.randomMaterial(i)
 
         return {'FINISHED'}
 
