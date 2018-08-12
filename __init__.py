@@ -176,7 +176,7 @@ class OBJECT_OT_add_road(bpy.types.Operator):
             
             layout.label(text="pathway widths")
             row = layout.row()
-            row.prop(scene, "lanes")
+            row.prop(scene, "laneCount")
             row.prop(scene, "laneWidth")
 
             row = layout.row()
