@@ -12,13 +12,14 @@ def makeCurve():
 
 
 def useCurve(ob):
-
     ob.select=True
     ob.show_name = True
-    start = ob.data.splines[0].bezier_points[0].co
-    bpy.context.scene.cursor_location = start
-    bpy.ops.object.origin_set(type='ORIGIN_CURSOR')
-
+    if ob.data.splines[0].use_cyclic_u == False:
+        start = ob.data.splines[0].bezier_points[0].co
+        bpy.context.scene.cursor_location = start
+        bpy.ops.object.origin_set(type='ORIGIN_CURSOR')
+    else: 
+        ob.data.use_path = False    
 def createCurve(): #style = selected curve or new curve. curve is optional variable.
     cu=bpy.data.curves.new("myCurve", 'CURVE')
     ob=bpy.data.objects.new("CurvyRoad", cu)

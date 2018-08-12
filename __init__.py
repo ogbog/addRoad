@@ -106,8 +106,8 @@ class OBJECT_OT_add_road(bpy.types.Operator):
         )
     
     
-    lanes = bpy.props.IntProperty( 
-        name = "Lanes",
+    laneCount = bpy.props.IntProperty( 
+        name = "Lane Count",
         default = 2,
         min = 1,
         description = "Number of lanes"
@@ -242,23 +242,26 @@ class OBJECT_OT_add_road(bpy.types.Operator):
         makeCurve.makeCurve()
         roadCurve = bpy.context.selected_objects[-1]        
         
-        
+#divider        
         
         if (self.dividerWidth !=0):
             divider = meshSetup.groundMesh("divider", 0, self.dividerWidth)
             curveSetup.curveSetup (roadCurve, divider, 1)     
             roadMeshes.append(divider)
+
+#lanes        
         if (self.laneWidth !=0):
             lanes = meshSetup.groundMesh("lanes", self.dividerWidth, self.dividerWidth+self.laneWidth)
-            curveSetup.curveSetup (roadCurve, lanes, 1, self.lanes)     
-            roadMeshes.append(lanes)
-        
+            if (self.laneCount > 1):  
+                curveSetup.lanesSetup(lanes, self.laneCount)  
+            curveSetup.curveSetup (roadCurve, lanes, 1)   
+            roadMeshes.append(lanes)        
         #since road is multiplicative, a custom variable
-        newLaneStart = self.laneWidth*self.lanes
+        newLaneStart = self.laneWidth*self.laneCount
         newLaneStart +=self.dividerWidth
 
-#        roadExtras = [shoulder, bike, gutter, greenway, sidewalk]
-#        roadMeshes=[divider, lanes, shoulder, bike, gutter, greenway, sidewalk]        
+
+
 
 
         
