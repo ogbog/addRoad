@@ -1,6 +1,6 @@
 import bpy
 
-def parentRig(name):
+def parentRig(name, baby):
 
     amt = bpy.data.armatures.new(name)
     ob = bpy.data.objects.new(name, amt)
@@ -14,3 +14,7 @@ def parentRig(name):
     bone = amt.edit_bones.new('Bone')
     bone.head = (0,0,0)
     bone.tail = (0,0,1)
+    
+    baby.parent= ob
+    
+    return (ob)
