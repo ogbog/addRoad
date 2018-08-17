@@ -20,11 +20,10 @@ def groundMesh (name, dist1, dist2): #dist1&2 are distance from center and how f
         (5,dist1,0)
     ]
     me.from_pydata(myVerts, [], [(0,1,2,3)])
-    bpy.ops.object.shade_smooth()
-    bpy.ops.uv.reset()
-    bpy.ops.mesh.uv_texture_add()
-    uv_textures["UVMap"].name
+    me.uv_textures.new(name="base")
+    me.uv_textures.new(name="accent")
+#    uv_textures["UVMap"].name
     
-    bpy.data.meshes['lanesMesh'].uv_textures[1].name='accent'
+#    bpy.data.meshes['lanesMesh'].uv_textures[1].name='accent'
 
     return ob
