@@ -9,7 +9,6 @@ def cyclesCheck():
         bpy.context.scene.render.engine = 'CYCLES'
 
 
-
 #assign random RGB to make more visible
 def randomMaterial(ob):
     newMat = bpy.data.materials.new(ob.name+"Material")
@@ -18,10 +17,6 @@ def randomMaterial(ob):
     
     myTuple = (random.random(), random.random(), random.random(), 1.0)
     newMat.node_tree.nodes['Diffuse BSDF'].inputs[0].default_value = myTuple # black
-
-
-
-
 
 
 def mainMaterial(ob):
