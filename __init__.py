@@ -104,13 +104,13 @@ class OBJECT_OT_add_road(bpy.types.Operator):
     laneCount = bpy.props.IntProperty(name = "Lane Count", default = 2, min = 1, description = "Number of lanes")
 
     
-    laneWidth = bpy.props.FloatProperty(name = "lanes", default = 3, min = .01, description = "How wide across each lane is")
-    dividerWidth = bpy.props.FloatProperty(name = "divider", default = .5, min = 0, description = "division size between east/west traffic lanes")
-    shoulderWidth = bpy.props.FloatProperty(name = "shoulder", default = 2, min = 0, description = "width of shoulder or parking lane to left/right")
-    bikeWidth = bpy.props.FloatProperty(name = "bike", default = 1, min = 0, description = "width of shoulder or parking lane to left/right")
-    gutterWidth = bpy.props.FloatProperty(name = "gutter", default = .2, min = 0, description = "width of gutter as transition to pedestrian area" )#needs a height modifier...? 
-    greenwayWidth = bpy.props.FloatProperty(name="greenway", default = 1, min = 0, description = "width of greenish area ala seattle" )    
-    sidewalkWidth = bpy.props.FloatProperty(name="sidewalk", default = 1.5, min = 0, description = "width of sidewalk" )
+    laneWidth = bpy.props.FloatProperty(name = "lanes", default = 3.0, min = .01, description = "How wide across each lane is")
+    dividerWidth = bpy.props.FloatProperty(name = "divider", default = .5, min = 0.0, description = "division size between east/west traffic lanes")
+    shoulderWidth = bpy.props.FloatProperty(name = "shoulder", default = 2.0, min = 0.0, description = "width of shoulder or parking lane to left/right")
+    bikeWidth = bpy.props.FloatProperty(name = "bike", default = 1.9, min = 0.0, description = "width of shoulder or parking lane to left/right")
+    gutterWidth = bpy.props.FloatProperty(name = "gutter", default = .2, min = 0.0, description = "width of gutter as transition to pedestrian area" )#needs a height modifier...? 
+    greenwayWidth = bpy.props.FloatProperty(name="greenway", default = 1.0, min = 0.0, description = "width of greenish area ala seattle" )    
+    sidewalkWidth = bpy.props.FloatProperty(name="sidewalk", default = 1.5, min = 0.0, description = "width of sidewalk" )
     
     
 
@@ -195,86 +195,54 @@ class OBJECT_OT_add_road(bpy.types.Operator):
 
 
 #assembling the default road
-        roadExtras = []
-        roadMeshes = []
 
 
         makeCurve.makeCurve()
         roadCurve = bpy.context.selected_objects[-1]        
         
-#divider        
-        
-        if (self.dividerWidth !=0):
-            divider = meshSetup.groundMesh("divider", 0, self.dividerWidth)
-            curveSetup.curveSetup (roadCurve, divider, 1)     
-            roadMeshes.append(divider)
+
+        roadMeshes = []
+        roadOrder = ["divider", "lanes", "sidewalk", "greenway", "gutter", "bike", "shoulder"]
+        meshiepoos = {
+            "divider" : self.dividerWidth,
+            "lanes" : self.laneWidth,
+            "sidewalk" : self.sidewalkWidth,
+            "greenway" : self.greenwayWidth,
+            "gutter" : self.gutterWidth,
+            "bike" : self.bikeWidth,
+            "shoulder" : self.shoulderWidth
+            } 
 
 
-#lanes        
-        if (self.laneWidth !=0):
-            lanes = meshSetup.groundMesh("lanes", self.dividerWidth, self.dividerWidth+self.laneWidth)
-            if (self.laneCount > 1):  
-                curveSetup.lanesSetup(lanes, self.laneCount)  
-            curveSetup.curveSetup (roadCurve, lanes, 1)   
-            roadMeshes.append(lanes)        
 
-
-        #since road is multiplicative, a custom variable
-        newLaneStart = self.laneWidth*self.laneCount
-        newLaneStart +=self.dividerWidth
+        newLaneStart = 0.0
         
+        for x in roadOrder: 
+            y = meshiepoos[x]
+            if y !=0.0:
+                z = meshSetup.groundMesh(x, newLaneStart, newLaneStart + y)
+                roadMeshes.append(z)
+                if x != "lanes":
+                    curveSetup.curveSetup (roadCurve, z, 1)       
+                    newLaneStart+=y     
+                else:
+                    if (y > 1):  
+                        curveSetup.lanesSetup(z, self.laneCount)  
+                        curveSetup.curveSetup (roadCurve, z, 1)       
+                        newLaneStart += y*self.laneCount
 
-        meshProps = [self.shoulderWidth, self.bikeWidth, self.gutterWidth, self.greenwayWidth, self.sidewalkWidth]
-        print(meshProps[0])
-        print(self.shoulderWidth)
-        
-        '''
-        for i in meshProps:
-                if (i != 0):
-                    me = meshSetup.groundMesh(i.name, newLaneStart, newLaneStart + i)            
-                    newLaneStart+=i    
-                    roadExtras.append(me)
+                materialSetup.mainMaterial(z)
 
         
-        '''
-        
-        
-        if (self.shoulderWidth != 0):
-            shoulder = meshSetup.groundMesh("shoulder", newLaneStart, newLaneStart + self.shoulderWidth)            
-            newLaneStart+=self.shoulderWidth        
-            roadExtras.append(shoulder)
-        
-        if (self.bikeWidth !=0):
-            bike = meshSetup.groundMesh("bike", newLaneStart, newLaneStart + self.bikeWidth)
-            newLaneStart+=self.bikeWidth        
-            roadExtras.append(bike)
-        
-        if (self.gutterWidth !=0):
-            gutter = meshSetup.groundMesh("gutter", newLaneStart, newLaneStart + self.gutterWidth)
-            newLaneStart+=self.gutterWidth        
-            roadExtras.append(gutter)
-        if (self.greenwayWidth !=0):
-            greenway = meshSetup.groundMesh("greenway", newLaneStart, newLaneStart + self.greenwayWidth)
-            newLaneStart+=self.greenwayWidth        
-            roadExtras.append(greenway)
-        if (self.sidewalkWidth !=0):
-            sidewalk = meshSetup.groundMesh("sidewalk", newLaneStart, newLaneStart + self.sidewalkWidth)
-            newLaneStart+=self.sidewalkWidth
-            roadExtras.append(sidewalk)
-            
-            
-        
-        roadMeshes += roadExtras
 
 
-        for i in roadExtras:
-            curveSetup.curveSetup (roadCurve, i, 1)      
+
+    
 
 
         materialSetup.cyclesCheck()
         
-        for i in roadMeshes: 
-                materialSetup.mainMaterial(i)
+                
         return {'FINISHED'}
 
 
