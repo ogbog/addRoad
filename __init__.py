@@ -48,9 +48,7 @@ import os
 import bpy
 import random
 from mathutils import Vector
-C=bpy.context
-D=bpy.data
-O=bpy.ops
+
 
 
 # classes
