@@ -2,7 +2,7 @@ bl_info = {
     "name":"Add a road ",
     "author":"Oscar",
     "version":(1,0),
-    "blender":(2,79),
+    "blender":(2,80),
     "location":"View3D > Add > Mesh > Add road",
     "description":"Adds a new road",
     "warning":"",
@@ -253,11 +253,13 @@ def add_object_button(self, context):
 
 # registration
 def register():
+    from bpy.utils import register_class
     bpy.utils.register_class(OBJECT_OT_add_road)
     #bpy.utils.register_class(smooth_monkey_panel)
     bpy.types.INFO_MT_mesh_add.append(add_object_button)
 
 def unregister():
+    from bpy.utils import unregister_class
     bpy.utils.unregister_class(OBJECT_OT_add_road)
     #bpy.utils.unregister_class(smooth_monkey_panel)
     bpy.types.INFO_MT_mesh_add.remove(ct_button)
