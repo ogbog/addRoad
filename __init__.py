@@ -1,11 +1,7 @@
 bl_info = {
     "name":"Add a road ",
     "author":"Oscar",
-<<<<<<< HEAD
-    "version":(1,0),
-=======
-    "version":(1,1),
->>>>>>> 3ff5d19a8341c71c5c86f1ffd7ecbb253dc6cdd5
+   "version":(1,0),
     "blender":(2,80),
     "location":"View3D > Add > Mesh > Add road",
     "description":"Adds a new road",
@@ -53,14 +49,6 @@ import bpy
 import random
 from mathutils import Vector
 
-<<<<<<< HEAD
-=======
-from bpy.types import Operator
-from bpy.props import FloatVectorProperty, BoolProperty, EnumProperty, StringProperty, IntProperty
-from bpy_extras.object_utils import AddObjectHelper, object_data_add
-from mathutils import Vector
-
->>>>>>> 3ff5d19a8341c71c5c86f1ffd7ecbb253dc6cdd5
 
 
 # classes
