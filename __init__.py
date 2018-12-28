@@ -1,7 +1,11 @@
 bl_info = {
     "name":"Add a road ",
     "author":"Oscar",
+<<<<<<< HEAD
     "version":(1,0),
+=======
+    "version":(1,1),
+>>>>>>> 3ff5d19a8341c71c5c86f1ffd7ecbb253dc6cdd5
     "blender":(2,80),
     "location":"View3D > Add > Mesh > Add road",
     "description":"Adds a new road",
@@ -49,15 +53,25 @@ import bpy
 import random
 from mathutils import Vector
 
+<<<<<<< HEAD
+=======
+from bpy.types import Operator
+from bpy.props import FloatVectorProperty, BoolProperty, EnumProperty, StringProperty, IntProperty
+from bpy_extras.object_utils import AddObjectHelper, object_data_add
+from mathutils import Vector
+
+>>>>>>> 3ff5d19a8341c71c5c86f1ffd7ecbb253dc6cdd5
 
 
 # classes
-class OBJECT_OT_add_road(bpy.types.Operator):
+
+
+class OBJECT_OT_add_road(Operator, AddObjectHelper):
 
     
     """Adds a road to the 3D view"""
-    bl_label = "Add road"
     bl_idname = "mesh.add_road"
+    bl_label = "Add road"
     bl_options = {'REGISTER', 'UNDO'}
     
     '''
@@ -90,25 +104,25 @@ class OBJECT_OT_add_road(bpy.types.Operator):
         #update = updateRoadPreset()
         )
     
-    accDividerOn=bpy.props.BoolProperty(name="Divider accessories on/off", default=True, description="Turn on Accessories on the road divider")
-    accShoulderOn=bpy.props.BoolProperty(name="Shoulder accessories on/off", default=True, description="Turn on Accessories on the shoulder")
-    accGutterOn=bpy.props.BoolProperty(name="Gutter accessories on/off", default=True, description="Turn on Accessories on the gutter")
-    accGreenwayOn=bpy.props.BoolProperty(name="Greenway accessories on/off", default=True, description="Turn on Accessories on the greenway")
-    accSidewalkOn=bpy.props.BoolProperty(name="Sidewalk accessories on/off", default=True, description="Turn on Accessories on the sidewalk")
-    accDivider=bpy.props.EnumProperty(name = "Divider accessory", description = "Selects which kind of divider accessory to insert", items = [("rail", "rail", "motherfucking rail"), ("concrete", "concrete", "motherfucking concrete"), ("poles", "poles", "motherfucking poles")])
+    accDividerOn: BoolProperty(name="Divider accessories on/off", default=True, description="Turn on Accessories on the road divider")
+    accShoulderOn: BoolProperty(name="Shoulder accessories on/off", default=True, description="Turn on Accessories on the shoulder")
+    accGutterOn: BoolProperty(name="Gutter accessories on/off", default=True, description="Turn on Accessories on the gutter")
+    accGreenwayOn: BoolProperty(name="Greenway accessories on/off", default=True, description="Turn on Accessories on the greenway")
+    accSidewalkOn: BoolProperty(name="Sidewalk accessories on/off", default=True, description="Turn on Accessories on the sidewalk")
+    accDivider: EnumProperty(name = "Divider accessory", description = "Selects which kind of divider accessory to insert", items = [("rail", "rail", "motherfucking rail"), ("concrete", "concrete", "motherfucking concrete"), ("poles", "poles", "motherfucking poles")])
     #enums 
     
-    name = bpy.props.StringProperty(name = "Name", default = "Road", description = "Name of added road")
-    laneCount = bpy.props.IntProperty(name = "Lane Count", default = 2, min = 1, description = "Number of lanes")
+    name:  StringProperty(name = "Name", default = "Road", description = "Name of added road")
+    laneCount: IntProperty(name = "Lane Count", default = 2, min = 1, description = "Number of lanes")
 
     
-    laneWidth = bpy.props.FloatProperty(name = "lanes", default = 3.0, min = .01, description = "How wide across each lane is")
-    dividerWidth = bpy.props.FloatProperty(name = "divider", default = .5, min = 0.0, description = "division size between east/west traffic lanes")
-    shoulderWidth = bpy.props.FloatProperty(name = "shoulder", default = 2.0, min = 0.0, description = "width of shoulder or parking lane to left/right")
-    bikeWidth = bpy.props.FloatProperty(name = "bike", default = 1.9, min = 0.0, description = "width of shoulder or parking lane to left/right")
-    gutterWidth = bpy.props.FloatProperty(name = "gutter", default = .2, min = 0.0, description = "width of gutter as transition to pedestrian area" )#needs a height modifier...? 
-    greenwayWidth = bpy.props.FloatProperty(name="greenway", default = 1.0, min = 0.0, description = "width of greenish area ala seattle" )    
-    sidewalkWidth = bpy.props.FloatProperty(name="sidewalk", default = 1.5, min = 0.0, description = "width of sidewalk" )
+    laneWidth: FloatVectorProperty(name = "lanes", default = 3.0, min = .01, description = "How wide across each lane is")
+    dividerWidth: FloatVectorProperty(name = "divider", default = .5, min = 0.0, description = "division size between east/west traffic lanes")
+    shoulderWidth: FloatVectorProperty(name = "shoulder", default = 2.0, min = 0.0, description = "width of shoulder or parking lane to left/right")
+    bikeWidth: FloatVectorProperty(name = "bike", default = 1.9, min = 0.0, description = "width of shoulder or parking lane to left/right")
+    gutterWidth: FloatVectorProperty(name = "gutter", default = .2, min = 0.0, description = "width of gutter as transition to pedestrian area" )#needs a height modifier...? 
+    greenwayWidth: FloatVectorProperty(name="greenway", default = 1.0, min = 0.0, description = "width of greenish area ala seattle" )    
+    sidewalkWidth: FloatVectorProperty(name="sidewalk", default = 1.5, min = 0.0, description = "width of sidewalk" )
     
     
 
@@ -253,14 +267,12 @@ def add_object_button(self, context):
 def register():
     from bpy.utils import register_class
     bpy.utils.register_class(OBJECT_OT_add_road)
-    #bpy.utils.register_class(smooth_monkey_panel)
-    bpy.types.INFO_MT_mesh_add.append(add_object_button)
-
+    bpy.utils.register_manual_map(add_road_manual_map)
+    bpy.types.VIEW3D_MT_mesh_add.append(add_object_button)
 def unregister():
     from bpy.utils import unregister_class
     bpy.utils.unregister_class(OBJECT_OT_add_road)
-    #bpy.utils.unregister_class(smooth_monkey_panel)
-    bpy.types.INFO_MT_mesh_add.remove(ct_button)
-
+    bpy.utils.unregister_manual_map(add_road_manual_map)
+    bpy.types.VIEW3D_MT_mesh_add.remove(add_object_button)
 if __name__ == "__main__":
     register()
