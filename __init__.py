@@ -37,7 +37,7 @@ import os
 import bpy
 import random
 from bpy.types import Operator
-from bpy.props import FloatVectorProperty, BoolProperty, IntProperty, EnumProperty, StringProperty
+from bpy.props import FloatVectorProperty, BoolProperty, IntProperty, EnumProperty, StringProperty, FloatProperty
 from bpy_extras.object_utils import AddObjectHelper, object_data_add
 from mathutils import Vector
 
@@ -236,20 +236,19 @@ class OBJECT_OT_add_road(bpy.types.Operator):
 
 
 
-def add_object_button(self, context):
+def add_road_button(self, context):
     self.layout.operator(
             OBJECT_OT_add_road.bl_idname)
 
 # registration
 def register():
     bpy.utils.register_class(OBJECT_OT_add_road)
-    #bpy.utils.register_class(smooth_monkey_panel)
-    bpy.types.INFO_MT_mesh_add.append(add_object_button)
+    #bpy.utils.register_manual_map(add_road_manual_map)
+    bpy.types.VIEW3D_MT_mesh_add.append(add_road_button)
 
 def unregister():
     bpy.utils.unregister_class(OBJECT_OT_add_road)
-    #bpy.utils.unregister_class(smooth_monkey_panel)
-    bpy.types.INFO_MT_mesh_add.remove(ct_button)
-
+    #bpy.utils.unregister_manual_map(add_road_manual_map)
+    bpy.types.VIEW3D_MT_mesh_add.remove(add_road_button)
 if __name__ == "__main__":
     register()
