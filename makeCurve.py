@@ -4,15 +4,15 @@ from mathutils import Vector
 
 
 def makeCurve():
-    if (len(bpy.context.selected_objects) > 0 and bpy.context.selected_objects[-1].type == "CURVE"):
-        useCurve(bpy.context.selected_objects[-1])
+    if (len(bpy.context.selected_objects) > 0 and bpy.context.active_object.type == "CURVE"):
+        useCurve(bpy.context.active_object)
     else:
         createCurve()
     
 
 
 def useCurve(ob):
-    ob.select=True
+    #ob.select_set(1)
     ob.show_name = True
     if ob.data.splines[0].use_cyclic_u == False:
         start = ob.data.splines[0].bezier_points[0].co
@@ -24,9 +24,13 @@ def createCurve(): #style = selected curve or new curve. curve is optional varia
     cu=bpy.data.curves.new("myCurve", 'CURVE')
     ob=bpy.data.objects.new("CurvyRoad", cu)
     ob.location = (0,0,0)
-    ob.select=True
+    #make collection
+    col = bpy.data.collections.new('road')
+    bpy.context.scene.collection.children.link(col)
+    col.objects.link(ob)
+    #bpy.context.scene.objects.link(ob)
+    ob.select_set(1)
     ob.show_name = True
-    bpy.context.scene.objects.link(ob)
     cu.splines.data.splines.new("BEZIER")
     cu.splines.data.splines[0].bezier_points.add(2)
 

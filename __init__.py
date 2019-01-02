@@ -229,7 +229,7 @@ class OBJECT_OT_add_road(bpy.types.Operator):
     
 
 
-        materialSetup.cyclesCheck()
+        #materialSetup.cyclesCheck()
         
                 
         return {'FINISHED'}
